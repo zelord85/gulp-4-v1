@@ -1,4 +1,4 @@
-# gulp-4 [[Build Status]]
+# gulp-4
 
 Front-end template for Gulp 4 with everything you need to get started.
 
@@ -33,7 +33,6 @@ The following Node versions have been tested
 * 6.x
 
 ## Version
-==========================
 1.1.3
 
 ## License
