@@ -1,0 +1,37 @@
+{
+  "name": "gulp_4.0",
+  "version": "1.0.0",
+  "description": "gulp template",
+  "main": "index.js",
+  "scripts": {
+    "test": "scss-lint src/components/* --config lint.yml"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zelord85/gulp-4.0.git"
+  },
+  "author": "Andrienko Serhii",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^4.0.0",
+    "gulp-clean": "^0.4.0",
+    "gulp-clean-css": "^4.0.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-imagemin": "^5.0.3",
+    "gulp-plumber": "^1.2.1",
+    "gulp-pug": "^4.0.1",
+    "gulp-rename": "^1.4.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-scss-lint": "^1.0.0",
+    "gulp-scss-lint-stylish": "^1.0.1",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-typescript": "^5.0.1",
+    "gulp-uglify": "^3.0.2",
+    "less-plugin-autoprefix": "^2.0.0",
+    "typescript": "^3.4.4"
+  },
+  "dependencies": {
+    "gulp-autoprefixer": "^6.1.0",
+    "gulp-less": "^4.0.1"
+  }
+}
