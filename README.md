@@ -12,9 +12,14 @@ PUG + SCSS/LESS + JS/TS
         imagemin        = require('gulp-imagemin'),             // Сжатие изображений в Gulp
         plumber         = require('gulp-plumber'),              // Настройка обработки ошибок в Gulp -->
 
-"devDependencies"
-    "gulp": "^4.0.0"
-    "gulp-clean": "^0.4.0"
+<strong>devDependencies<strong>
+<ul>
+	<li><a href='' target="_blank"><b>gulp :</b></a> ^4.0.0</li>
+	<li><a href='https://www.npmjs.com/package/gulp-pug' target="_blank"><b>gulp-pug :</b></a> ^4.0.1</li>
+	<li><a href='' target="_blank"><b>gulp-concat :</b></a> ^2.6.1</li>
+</ul>
+    
+<!--     "gulp-clean": "^0.4.0"
     "gulp-clean-css": "^4.0.0"
     "gulp-concat": "^2.6.1" - конкатенация (соединение нескольких файлов в один файл)
     "gulp-imagemin": "^5.0.3"
@@ -29,4 +34,4 @@ PUG + SCSS/LESS + JS/TS
     "less-plugin-autoprefix": "^2.0.0"
     "typescript": "^3.4.4"
     "gulp-autoprefixer": "^6.1.0"
-    "gulp-less": "^4.0.1" https://www.npmjs.com/package/gulp-less - Компиляции LESS-файлов в CSS-файлы
+    "gulp-less": "^4.0.1" https://www.npmjs.com/package/gulp-less - Компиляции LESS-файлов в CSS-файлы -->
