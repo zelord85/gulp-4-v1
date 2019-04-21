@@ -10,8 +10,11 @@ const   gulp            = require('gulp'),                      // Сам сбо
         scssLint        = require('gulp-scss-lint'),            // sass(scss) линтер
         less            = require('gulp-less'),                 // Компиляции LESS-файлов в CSS-файлы
         imagemin        = require('gulp-imagemin'),             // Сжатие изображений в Gulp
-        plumber         = require('gulp-plumber'),              // Настройка обработки ошибок в Gulp
-        cleaner         = require('gulp-clean');
+        plumber         = require('gulp-plumber'),              // Настройка обработки ошибок в Gulp,
+        debug           = require('gulp-debug'),                // дебаггер
+        esLint          = require('gulp-eslint'),               // JS линтер
+        cleaner         = require('gulp-clean'),
+        browserSync     = require('browser-sync').create();     // 
 
 /* This const need to src / dist simple notation :
  *
@@ -85,6 +88,17 @@ const path = {
 // HTML / PUG TASKS
 // ------------------------------------------------------------------------- */
 
+function html() {
+    return gulp.src('src/html/*.pug')
+        .pipe(plumber())
+        .pipe(pug({
+            pretty: '\t'
+        }))
+        .pipe(plumber.stop())
+        .pipe(rename('index.html'))
+        .pipe(gulp.dest('dist'))
+}
+
 // STYLE TASKS (SCSS)
 // ------------------------------------------------------------------------- */
 
@@ -142,6 +156,25 @@ function styleLESS() {
 // JAVASCRIPT TASKS
 // ------------------------------------------------------------------------- */
 
+function scripts() {
+
+    var rootDir = './src';
+    var js = [
+        // rootDir + '/partials/lib/jquery-2.1.1.js',
+        // rootDir + '/partials/lib/jquery.mask.js',
+        rootDir + '/scripts/js/scripts.js'
+    ];
+    
+    // return src(js)
+    return gulp.src(js)
+        .pipe(plumber())
+        .pipe(sourcemaps.init())
+        .pipe(concat('script.js'))
+        // .pipe(uglify())
+        .pipe(sourcemaps.write('./maps'))
+        .pipe(gulp.dest('dist/js/'))
+}
+
 // TYPESCRIPT TASKS
 // ------------------------------------------------------------------------- */
 
@@ -151,14 +184,14 @@ const tsProject = ts.createProject("tsconfig.json");
 function typeScript() {
     return tsProject.src()
         .pipe(tsProject())
-        .js.pipe(gulp.dest("dist"));
+        .js.pipe(gulp.dest("dist"))
 }
 
 // IMAGES TASKS
 // ------------------------------------------------------------------------- */
 
 var imgPATH = {
-    input: ["src/images/**/*.{png,jpg,gif,svg}",
+    "input": ["src/images/**/*.{png,jpg,gif,svg}",
         '!src/images/svg/*'],
     "ouput": "dist/images/"
 };
@@ -183,7 +216,6 @@ function images() {
             ])
         )
         .pipe(gulp.dest('dist/images'))
-
 }
 
 // FONTS TASKS
@@ -207,25 +239,42 @@ function scss_lint() {
         .pipe(scssLint({ 
             'config': 'smacss.yml',
             'reporterOutput': 'scssReport.json'
-        }));
+        }))
+}
+
+function js_lint() {
+    return gulp.src('src/scripts/**/*.js')
+        .pipe(esLint())
+        .pipe(esLint.format())
+        .pipe(esLint.failAfterError())
 }
 
 // SERVICES TASKS
 // ------------------------------------------------------------------------- */
 
-function clean(cb) {
-    return gulp.src('dist', {read: false})
+function clean(callback) {
+    gulp.src('dist', {read: false})
         .pipe(cleaner())
-    cb();
+    callback();
 }
 
 // function del() {
-//  return del([ 'assets' ]);
+//     return del([ 'dist' ]);
 // }
 
 function watch() {
-//  gulp.watch(path.watch.fonts, fonts);
-//  gulp.watch(path.watch.images, images);
+    gulp.watch('src/html/**/*.pug', html).on("change", browserSync.reload);
+    gulp.watch('src/style/**/*.s+(a|c)ss', styleSCSS).on("change", browserSync.reload);
+    gulp.watch('src/fonts/**/*.{eot,svg,ttf,woff,woff2}', fonts).on("change", browserSync.reload);
+    gulp.watch('src/images/**/*.{png,jpg,gif,svg}', images).on("change", browserSync.reload);
+}
+
+function livereload() {
+    return browserSync.init({
+        server: {
+            baseDir: "./dist"
+        }
+    });
 }
 
 // GULP RUN
@@ -234,14 +283,17 @@ function watch() {
 // Register tasks to expose to the CLI
 // ------------------------------------------------------------------------- */
 
+exports.html = html;
 exports.styleSCSS = styleSCSS;
 exports.styleLESS = styleLESS;
 exports.fonts = fonts;
 exports.images = images;
 exports.clean = clean;
+exports.scripts = scripts;
 exports.typeScript = typeScript;
 exports.scss_lint = scss_lint;
-
+// exports.js_lint = js_lint;
+exports.livereload = livereload;
 
 /* -------------------------------------------------------------------------
  * Define default task that can be called by just running `gulp` from cli
@@ -249,14 +301,10 @@ exports.scss_lint = scss_lint;
  */ 
 
 // v 0.1
+// var prod = gulp.series(gulp.parallel(images));
 
-var build = gulp.series(gulp.parallel(images));
+// gulp.task('production', prod);
+// gulp.task('default', build);
 
-gulp.task('build', gulp.series(
- cleaner,
- gulp.parallel(fonts, images)
-));
-
-gulp.task('default', build);
-
-exports.default = gulp.series(images, fonts, typeScript, styleSCSS, styleLESS);
+// v 0.2
+exports.default = gulp.series(html, styleSCSS, scripts, images, fonts, gulp.parallel(watch, livereload));

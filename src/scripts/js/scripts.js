@@ -5,4 +5,3 @@ main.jswindow.onload = function() {
 // jQuery(document).ready(function($) {
 // 	console.log( 'Документ и все ресурсы загружены' );
 // });
-

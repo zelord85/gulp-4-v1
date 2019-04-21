@@ -33,7 +33,7 @@ The following Node versions have been tested
 * 6.x
 
 ## Version
-1.1.3
+0.1.1
 
 ## License
 
